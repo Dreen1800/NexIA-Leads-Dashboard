@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { CircleCheck, Info, X, TrendingUp, Users, UserCheck, UserX, BarChart3, ArrowUpRight } from "lucide-react";
+import { CircleCheck, Info, X, TrendingUp, Users, UserCheck, UserX, BarChart3, ArrowUpRight, User, Phone, Mail, Calendar, Globe } from "lucide-react";
 import StatCard from "@/components/dashboard/StatCard";
 import logoImg from "@/assets/Logo.webp";
 import TrendChart from "@/components/dashboard/TrendChart";
@@ -20,6 +20,7 @@ import IndicadoresTable from "@/components/dashboard/IndicadoresTable";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from "@/components/ui/dialog";
 import { Indicador, Indicado } from "@/types/supabase";
 import IndicadosTable from "@/components/dashboard/IndicadosTable";
+import { format, parseISO } from "date-fns";
 
 // Definição dos ícones para cada stat card
 const statCardIcons = {
@@ -319,6 +320,72 @@ const Index = () => {
                 </span>
               </DialogTitle>
             </DialogHeader>
+
+            {/* Detalhes do indicador incluindo todos os campos UTM */}
+            <div className="py-3 border-b border-purple-100">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <h4 className="text-sm font-medium text-gray-500 mb-1">Informações do Indicador</h4>
+                  <div className="grid grid-cols-1 gap-2">
+                    <div className="flex items-center">
+                      <User className="h-4 w-4 mr-2 text-purple-500" />
+                      <span className="text-sm text-gray-700">{selectedIndicador?.nome} {selectedIndicador?.sobrenome}</span>
+                    </div>
+                    <div className="flex items-center">
+                      <Phone className="h-4 w-4 mr-2 text-purple-500" />
+                      <span className="text-sm text-gray-700">{selectedIndicador?.telefone}</span>
+                    </div>
+                    <div className="flex items-center">
+                      <Mail className="h-4 w-4 mr-2 text-purple-500" />
+                      <span className="text-sm text-gray-700">{selectedIndicador?.email || 'N/A'}</span>
+                    </div>
+                    <div className="flex items-center">
+                      <Calendar className="h-4 w-4 mr-2 text-purple-500" />
+                      <span className="text-sm text-gray-700">
+                        {selectedIndicador?.data_criacao ? format(parseISO(selectedIndicador.data_criacao), "dd/MM/yyyy") : 'N/A'}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="text-sm font-medium text-gray-500 mb-1">Origem do Lead</h4>
+                  <div className="grid grid-cols-1 gap-2">
+                    {selectedIndicador?.utm_source ? (
+                      <div className="flex items-center">
+                        <Globe className="h-4 w-4 mr-2 text-blue-500" />
+                        <span className="text-xs px-2 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-100">
+                          Fonte: {selectedIndicador.utm_source}
+                        </span>
+                      </div>
+                    ) : null}
+
+                    {selectedIndicador?.utm_campaign ? (
+                      <div className="flex items-center">
+                        <Globe className="h-4 w-4 mr-2 text-purple-500" />
+                        <span className="text-xs px-2 py-0.5 rounded bg-purple-50 text-purple-700 border border-purple-100">
+                          Campanha: {selectedIndicador.utm_campaign}
+                        </span>
+                      </div>
+                    ) : null}
+
+                    {selectedIndicador?.utm_content ? (
+                      <div className="flex items-center">
+                        <Globe className="h-4 w-4 mr-2 text-emerald-500" />
+                        <span className="text-xs px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-100">
+                          Conteúdo: {selectedIndicador.utm_content}
+                        </span>
+                      </div>
+                    ) : null}
+
+                    {!selectedIndicador?.utm_source && !selectedIndicador?.utm_campaign && !selectedIndicador?.utm_content && (
+                      <span className="text-sm text-gray-500">Sem informações de origem disponíveis</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <div className="pt-4 relative">
               {/* Hidden description for accessibility */}
               <span id="dialog-description" className="sr-only">Lista de pessoas indicadas pelo indicador selecionado</span>

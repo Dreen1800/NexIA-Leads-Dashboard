@@ -4,6 +4,10 @@ export interface Indicador {
   data_criacao: string | null;
   sobrenome: string | null;
   email: string | null;
+  cpf: string | null;
+  utm_source: string | null;
+  utm_campaign: string | null;
+  utm_content: string | null;
   total_indicacoes?: number;
   indicacoes_convertidas?: number;
 }
