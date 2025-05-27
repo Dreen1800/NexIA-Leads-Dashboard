@@ -8,6 +8,10 @@ export interface Indicador {
   utm_source: string | null;
   utm_campaign: string | null;
   utm_content: string | null;
+  utm_medium: string | null;
+  utm_term: string | null;
+  unique_id: string | null;
+  id: number;
   total_indicacoes?: number;
   indicacoes_convertidas?: number;
 }
